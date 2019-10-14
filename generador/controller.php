@@ -50,8 +50,20 @@
         $stmt = $GLOBALS['conn']->query("SELECT * FROM base.entitysubclass where identityclass=$id");
         $campos = $stmt->fetchAll();
         for ($i=0; $i < count($campos); $i++) { 
-            echo json_encode($campos[$i]);                
+            echo json_encode($campos[$i]['name']);                
+            echo json_encode($campos[$i]['code']);                
+            echo json_encode($campos[$i]['observation']);                
         }
+
+        $sql = "CREATE TABLE base.test (
+                id serial PRIMARY KEY,
+                code VARCHAR (50) UNIQUE NOT NULL,
+                name VARCHAR (50) NOT NULL,
+                created_on TIMESTAMP NOT NULL,
+                active character varying(1) NOT NULL DEFAULT 'Y'::character varying,
+                deleted character varying(1) NOT NULL DEFAULT 'N'::character varying,
+            )";
+        // $GLOBALS['conn']->prepare($sql)->execute();
     }
 
     createTable($id);
