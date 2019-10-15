@@ -17,17 +17,24 @@
             </tr>
             <tr> <td> <h2> Campos </h2> </td> </tr>
             <tr>
-                <th>Nombre del campo</th>
-                <th>Codigo del campo</th>
-                <th>Observaciones</th>
+                <th>Nombre del campo  (name)</th>
+                <th>Null (code)</th>
+                <th>tipo de dato (observation)</th>
             </tr>
         </tbody>
     </Table>
 
         <div>
             <input name='input1' type="text">
-            <input name='code1' type="text">
-            <input name='obser1' type="text">
+            <select name="code1" id="code1">
+                <option value="null">null</option>
+                <option value="NOT NULL">NOT NULL</option>
+            </select>
+            <select name="obser1" id="obser1">
+                <option value="VARCHAR"> VARCHAR </option>
+                <option value="integer"> integer </option>
+                <option value="bool"> bool </option>
+            </select>
         <input type="button" onclick="createTable(event)" Value="Crear">
         </div>
         <button id="submit" onclick="enviar(event)">Submit</button>
@@ -42,14 +49,14 @@ function createTable(event) {
      
     count++ 
     
-    let form = document.querySelector('#form');
+    let form = document.querySelector('#form');    
     // let formNode = event.target.parentNode;
     let formNode = document.querySelector('#submit').parentNode;
     //input a insertar
     var div = document.createElement("DIV");
     var input = document.createElement("INPUT");
-    var code = document.createElement("INPUT");
-    var observ = document.createElement("INPUT");
+    var code = document.querySelector('#code1').cloneNode(true);
+    var observ = document.querySelector('#obser1').cloneNode(true);
     input.setAttribute('name', 'input' + count)
     code.setAttribute('name', 'code' + count)
     observ.setAttribute('name', 'obser' + count)

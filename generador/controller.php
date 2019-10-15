@@ -14,6 +14,9 @@
         $names[] = $_POST["input$i"];
         $codes[] = $_POST["code$i"];
         $observs[] = $_POST["obser$i"];
+        /* echo $_POST["input$i"];
+        echo $_POST["code$i"];
+        echo $_POST["obser$i"]; */
     }
 
     function setTable($code, $name, $observacion) {
@@ -46,24 +49,36 @@
         $stmt = $GLOBALS['conn']->query("SELECT * FROM base.entityclass where id=$id");
         $Table = $stmt->fetch();
         $nameTable = $Table['name'];
-
+        
         $stmt = $GLOBALS['conn']->query("SELECT * FROM base.entitysubclass where identityclass=$id");
         $campos = $stmt->fetchAll();
+        
+        $string = '';
         for ($i=0; $i < count($campos); $i++) { 
-            echo json_encode($campos[$i]['name']);                
-            echo json_encode($campos[$i]['code']);                
-            echo json_encode($campos[$i]['observation']);                
-        }
+            $string .= $campos[$i]['name'] ." ". $campos[$i]['observation'] ." ". $campos[$i]['code'] .",";
+        }              
 
-        $sql = "CREATE TABLE base.test (
+        $sql = "CREATE TABLE base.$nameTable (
                 id serial PRIMARY KEY,
                 code VARCHAR (50) UNIQUE NOT NULL,
                 name VARCHAR (50) NOT NULL,
+                $string
                 created_on TIMESTAMP NOT NULL,
                 active character varying(1) NOT NULL DEFAULT 'Y'::character varying,
-                deleted character varying(1) NOT NULL DEFAULT 'N'::character varying,
+                deleted character varying(1) NOT NULL DEFAULT 'N'::character varying
             )";
-        // $GLOBALS['conn']->prepare($sql)->execute();
+        print( $string);
+        
+        // En caso de queres hacerlo por php:
+        /* $GLOBALS['conn']->exec($sql); */
+
+        // Prueba de como ejecutar la funcion de postgre por aqui:
+        // $sql = "SELECT createTable('nombre', 'trabaja VARCHAR (50) NOT NULL')";
+
+        $array = array( $nameTable, $string );
+        $sql = 'SELECT createTable(?,?)';
+        $GLOBALS['conn']->prepare($sql)->execute($array);
+
     }
 
     createTable($id);
